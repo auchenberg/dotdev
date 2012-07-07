@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "***********************************"
+echo "Installing devDNS - wildcard DNS for *.dev"
+echo "***********************************"
 
 echo "*** Installing dnsmasq..."
 brew install dnsmasq
@@ -11,7 +14,7 @@ echo "*** Installing dnsmasq into LaunchDaemons..."
 sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
 sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 
-echo "*** Registerering .dev into /etc/resolver dnsmasq into LaunchDaemons..."
+echo "*** Registerering .dev into /etc/resolver..."
 sudo mkdir -v /etc/resolver
 sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
 
@@ -21,3 +24,5 @@ if ping -oc 100 'wildcard.dev' > /dev/null; then
 else
     echo "*** Sorrrry. Something went wrong. Don't blame me."
 fi
+
+echo 'Done. Im getting out of there.'
