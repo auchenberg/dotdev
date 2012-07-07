@@ -1,5 +1,15 @@
 #!/bin/sh
 
+set -o errexit
+set -e
+
+# Fail fast if we're not on OS X >= 10.6.0.
+
+if [ "$(uname -s)" != "Darwin" ]; then
+  echo "Sorry, DevDNS requires Mac OS X to run." >&2
+  exit 1
+fi
+
 echo "***********************************"
 echo "Installing devDNS - wildcard DNS for *.dev"
 echo "***********************************"
