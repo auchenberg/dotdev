@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -o errexit
 
 echo "*** Installing dnsmasq..."
 brew install dnsmasq
