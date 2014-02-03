@@ -10,19 +10,50 @@ if [ "$(uname -s)" != "Darwin" ]; then
   exit 1
 fi
 
+# Fail if we don't have Homebrew or MacPorts installed
+
+if ! command -v brew >/dev/null 2>&1 && ! command -v port >/dev/null 2>&1; then
+	echo "Sorry, DevDNS requires Homebrew or MacPorts to run."
+	exit 1
+fi
+
 echo "***********************************"
 echo "Installing devDNS - wildcard DNS for *.dev"
 echo "***********************************"
 
-echo "*** Installing dnsmasq..."
-brew install dnsmasq
+# Install using Homebrew
 
-echo "*** Configurating dnsmasq..."
-echo 'address=/.dev/127.0.0.1' > $(brew --prefix)/etc/dnsmasq.conf
+if command -v brew >/dev/null 2>&1; then
+	
+	echo "*** Installing dnsmasq with Homebrew..."
+	brew install dnsmasq
 
-echo "*** Installing dnsmasq into LaunchDaemons..."
-sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
-sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+	echo "*** Configurating dnsmasq..."
+	echo 'address=/.dev/127.0.0.1' > $(brew --prefix)/etc/dnsmasq.conf
+
+	echo "*** Installing dnsmasq into LaunchDaemons..."
+	sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
+	sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+
+else # Install using MacPorts
+	
+	MACPORTSDIR=/opt/local
+	
+	if [ ! -d $MACPORTSDIR ]; then
+		echo "Sorry, $MACPORTSDIR doesn't seem to exist. Please set MACPORTSDIR in this script."
+		exit 1
+	fi
+	
+	echo "*** Installing dnsmasq with MacPorts..."
+	sudo port install dnsmasq
+
+	echo "*** Configurating dnsmasq..."
+	sudo bash -c 'echo "address=/.dev/127.0.0.1" > $MACPORTSDIR/etc/dnsmasq.conf'
+
+	echo "*** Installing dnsmasq into LaunchDaemons..."
+	sudo port load dnsmasq
+
+fi
 
 echo "*** Registerering .dev into /etc/resolver..."
 sudo mkdir -v /etc/resolver
