@@ -18,7 +18,7 @@ if ! command -v brew >/dev/null 2>&1 && ! command -v port >/dev/null 2>&1; then
 fi
 
 echo "***********************************"
-echo "Installing DEV
+echo "Installing .dev"
 echo "***********************************"
 
 # Install using Homebrew
