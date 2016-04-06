@@ -56,7 +56,7 @@ else # Install using MacPorts
 fi
 
 echo "*** Registerering .dev into /etc/resolver..."
-sudo mkdir -v /etc/resolver
+[ -d /etc/resolver ] || sudo mkdir -v /etc/resolver
 sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
 
 echo 'Running self-check to see if .dev is working'
