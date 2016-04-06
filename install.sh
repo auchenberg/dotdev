@@ -56,8 +56,8 @@ else # Install using MacPorts
 fi
 
 echo "*** Registerering .dev into /etc/resolver..."
-sudo mkdir -v /etc/resolver
-sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
+[ -d /etc/resolver ] || sudo mkdir -v /etc/resolver
+sudo bash -c 'echo "nameserver 127.0.0.1\n" > /etc/resolver/dev'
 
 echo 'Running self-check to see if .dev is working'
 if ping -oc 100 'kenneth.dev' > /dev/null; then
